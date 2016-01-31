@@ -8,7 +8,7 @@ var express = require('express')
   , _ = require('lodash')
   , util = require('@naujs/util')
   , PersistedModel = require('@naujs/persisted-model')
-  , Service = require('../').Service
+  , NodeService = require('../').NodeService
   , ExpressApi = require('../').ExpressApi
   , Promise = util.getPromise()
   , Component = require('@naujs/component');
@@ -36,7 +36,7 @@ class DummyConnector extends Component {
   delete() {}
 }
 
-class DummyService extends Service {
+class DummyService extends NodeService {
   model() {
     return DummyModel;
   }

@@ -7,7 +7,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var express = require('express'),
     _ = require('lodash'),
     path = require('path'),
-    filters = require('./filters');
+    filters = require('./filters'),
+    NodeService = require('./node_service');
 
 var ExpressApi = (function () {
   _createClass(ExpressApi, null, [{
@@ -46,6 +47,9 @@ var ExpressApi = (function () {
     value: function build(Service) {
       var _this = this;
 
+      if (!(Service.prototype instanceof NodeService)) {
+        throw 'Service must be a subclass of NodeService';
+      }
       this._routers = this._routers || [];
       var endPoints = this._getEndPoints(Service);
       var router = express.Router();

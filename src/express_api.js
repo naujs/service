@@ -3,7 +3,8 @@
 var express = require('express')
   , _ = require('lodash')
   , path = require('path')
-  , filters = require('./filters');
+  , filters = require('./filters')
+  , NodeService = require('./node_service');
 
 class ExpressApi {
   static app(app) {
@@ -30,6 +31,9 @@ class ExpressApi {
   }
 
   build(Service) {
+    if (!(Service.prototype instanceof NodeService)) {
+      throw 'Service must be a subclass of NodeService';
+    }
     this._routers = this._routers || [];
     let endPoints = this._getEndPoints(Service);
     let router = express.Router();
