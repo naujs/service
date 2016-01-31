@@ -1,7 +1,7 @@
 'use strict';
 
-var Service = require('./service')
-  , NodeContext = require('./node_context');
+var Service = require('./Service')
+  , NodeContext = require('./NodeContext');
 
 class NodeService extends Service {
   setContext(context) {

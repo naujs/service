@@ -8,7 +8,7 @@ var express = require('express'),
     _ = require('lodash'),
     path = require('path'),
     filters = require('./filters'),
-    NodeService = require('./node_service');
+    NodeService = require('./NodeService');
 
 var ExpressApi = (function () {
   _createClass(ExpressApi, null, [{
