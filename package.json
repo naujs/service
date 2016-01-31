@@ -1,0 +1,36 @@
+{
+  "name": "@naujs/service",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naujs/service.git"
+  },
+  "author": "Tan Nguyen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/naujs/service/issues"
+  },
+  "homepage": "https://github.com/naujs/service#readme",
+  "devDependencies": {
+    "supertest": "^1.1.0"
+  },
+  "optionalDependencies": {
+    "@naujs/component": "^0.1.1",
+    "@naujs/data-mapper": "0.0.3",
+    "@naujs/persisted-model": "^0.2.9",
+    "@naujs/util": "^0.1.1",
+    "@naujs/gulp-tasks": "^0.1.1"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "superagent": "^1.7.2"
+  }
+}
