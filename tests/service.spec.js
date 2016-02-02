@@ -51,8 +51,8 @@ describe('Service', () => {
   });
 
   describe('#execute', () => {
-    it('should call method with correct arguments', (done) => {
-      service.execute('findAll', {where: {test: 'test'}}).then(() => {
+    it('should call method with correct arguments', () => {
+      return service.execute('findAll', {where: {test: 'test'}}).then(() => {
         expect(DataMapper.prototype.findAll.calls.count()).toEqual(1);
         expect(DataMapper.prototype.findAll).toHaveBeenCalledWith(DummyModel, {
           where: {
@@ -64,22 +64,24 @@ describe('Service', () => {
           limit: undefined,
           offset: undefined
         });
-      }, fail).then(done);
-    });
-
-    DEFAULT_METHODS.forEach((method) => {
-      it(`should call #${method} on data mapper`, (done) => {
-        service.execute(method).then(() => {
-          expect(DataMapper.prototype[method]).toHaveBeenCalled();
-        }, fail).then(done);
       });
     });
 
-    it('should return error when the method is not found', (done) => {
-      service.execute('invalid').then(fail, (error) => {
+    DEFAULT_METHODS.forEach((method) => {
+      it(`should call #${method} on data mapper`, () => {
+        return service.execute(method).then(() => {
+          expect(DataMapper.prototype[method]).toHaveBeenCalled();
+        });
+      });
+    });
+
+    it('should return error when the method is not found', () => {
+      return service.execute('invalid').then(function() {
+        throw 'Should not succeed';
+      }, (error) => {
         expect(error.code).toEqual(500);
         expect(error.httpCode).toEqual(500);
-      }).then(done);
+      });
     });
   });
 
@@ -96,7 +98,7 @@ describe('Service', () => {
       DummyService.before('findAll', before1);
     });
 
-    it('should call before hooks before calling the method', (done) => {
+    it('should call before hooks before calling the method', () => {
       before0.and.callFake(() => {
         calls.push(0);
         return Promise.resolve(true);
@@ -112,14 +114,14 @@ describe('Service', () => {
         return Promise.resolve({});
       });
 
-      service.execute('findAll', {test: 'test'}).then(() => {
+      return service.execute('findAll', {test: 'test'}).then(() => {
         expect(calls).toEqual([0, 1, 2]);
         expect(before0).toHaveBeenCalledWith({test: 'test'}, undefined);
         expect(before1).toHaveBeenCalledWith({test: 'test'}, undefined);
-      }, fail).then(done);
+      });
     });
 
-    it('should not call the method when any of the before hooks return error', (done) => {
+    it('should not call the method when any of the before hooks return error', () => {
       before0.and.callFake(() => {
         calls.push(0);
         let error = new Error();
@@ -137,10 +139,10 @@ describe('Service', () => {
         return Promise.resolve({});
       });
 
-      service.execute('findAll', {test: 'test'}).then(fail, (error) => {
+      return service.execute('findAll', {test: 'test'}).then(fail, (error) => {
         expect(calls).toEqual([0]);
         expect(error.code).toEqual(400);
-      }).then(done);
+      });
     });
 
   });
@@ -158,7 +160,7 @@ describe('Service', () => {
       DummyService.after('findAll', after1);
     });
 
-    it('should call after hooks after calling the method', (done) => {
+    it('should call after hooks after calling the method', () => {
       after0.and.callFake(() => {
         calls.push(0);
         return Promise.resolve(true);
@@ -174,14 +176,14 @@ describe('Service', () => {
         return Promise.resolve(3);
       });
 
-      service.execute('findAll', {test: 'test'}).then(() => {
+      return service.execute('findAll', {test: 'test'}).then(() => {
         expect(calls).toEqual([2, 0, 1]);
         expect(after0).toHaveBeenCalledWith({test: 'test'}, 3);
         expect(after1).toHaveBeenCalledWith({test: 'test'}, 3);
-      }, fail).then(done);
+      });
     });
 
-    it('should ignore error during the execution of after hooks', (done) => {
+    it('should ignore error during the execution of after hooks', () => {
       after0.and.callFake(() => {
         calls.push(0);
         let error = new Error();
@@ -199,11 +201,11 @@ describe('Service', () => {
         return Promise.resolve(3);
       });
 
-      service.execute('findAll', {test: 'test'}).then(() => {
+      return service.execute('findAll', {test: 'test'}).then(() => {
         expect(calls).toEqual([2, 0, 1]);
         expect(after0).toHaveBeenCalledWith({test: 'test'}, 3);
         expect(after1).toHaveBeenCalledWith({test: 'test'}, 3);
-      }, fail).then(done);
+      });
     });
   });
 

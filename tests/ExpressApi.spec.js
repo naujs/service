@@ -178,10 +178,10 @@ describe('ExpressApi', () => {
           spyOn(connector, spec.expectedMethod).and.returnValue(deferred.promise);
         });
 
-        it('should call #' + spec.expectedMethod, (done) => {
+        it('should call #' + spec.expectedMethod, () => {
           deferred.resolve(spec.expectedData);
 
-          helpers[spec.type](spec.path, spec.data).then((res) => {
+          return helpers[spec.type](spec.path, spec.data).then((res) => {
             expect(res.status).toEqual(200);
             expect(res.body.data).toEqual(spec.expectedData);
             expect(res.body.success).toBe(true);
@@ -192,20 +192,20 @@ describe('ExpressApi', () => {
             } else {
               expect(connector[spec.expectedMethod]).toHaveBeenCalled();
             }
-          }, fail).then(done);
+          });
         });
 
-        it('should return correct error', (done) => {
+        it('should return correct error', () => {
           deferred.reject(expectedError);
 
-          helpers[spec.type](spec.path, spec.data).then(fail, (res) => {
+          return helpers[spec.type](spec.path, spec.data).then(fail, (res) => {
             expect(res.status).toEqual(400);
             var error = res.body.error;
             expect(error.code).toEqual(40000);
             expect(error.message).toEqual(expectedError.message);
             expect(res.body.data).toEqual(null);
             expect(res.body.success).toBe(false);
-          }).then(done);
+          });
         });
       });
     });
